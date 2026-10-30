@@ -1,0 +1,29 @@
+# --- Vivado ---
+.Xil/
+*.jou
+*.str
+vivado*.backup.*
+fpga/build/
+*.cache/
+*.runs/
+*.hw/
+*.ip_user_files/
+# --- cocotb / Verilator ---
+sim_build/
+results.xml
+*.vcd
+*.fst
+__pycache__/
+.pytest_cache/
+# --- firmware ---
+*.o
+*.elf
+*.bin
+*.mem.tmp
+# --- Python ---
+.venv/
+# --- logs: ignore tool chatter, keep evidence ---
+*.log
+!verif/formal/**/*.log
+!validation/**/*.log
+!verif/uvm/**/*.log
