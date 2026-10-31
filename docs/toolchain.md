@@ -11,8 +11,8 @@ Everything here is pinned. CI must use the same versions.
 | cocotb | 2.1.0 | requirements.txt | smoke pass + fail test |
 | cocotbext-axi | 0.1.28 | requirements.txt | import check |
 | cocotb-coverage | 2.0 | requirements.txt | import check |
-| RISC-V GCC | pending (Step 6) | ~/opt/riscv symlink | t.S + t.c checks |
-| rv32im multilib | pending (Step 6) | — | -print-libgcc-file-name |
+| RISC-V GCC | xPack 15.2.0-1 (GCC 15.2.0) | ~/opt/riscv symlink | t.S + t.c checks |
+| rv32im multilib | present (rv32im/ilp32/libgcc.a) | — | -print-libgcc-file-name |
 | Vivado | 2026.1 (exact) | Windows / WSL | vivado -version |
 
 ## Notes
@@ -22,3 +22,7 @@ Everything here is pinned. CI must use the same versions.
 - Verilator v5.052 builds cleanly with GCC 15.2.0; about 6 min on 24 cores
 - System Python 3.14.4 is not used; project venv is 3.12
 - Host: 24 cores, 31 GB RAM available to WSL
+- xPack 15.2.0-1 download verified: sha256sum -c printed OK
+- t.S at -march=rv32im_zicsr: mul and csrr present; every instruction 4 bytes (addresses 0, 4, 8, c)
+- Same t.S at rv32imc_zicsr shrinks li and j to 2 bytes: shows what the wrong -march would do
+- t.c (a/b) at -O2 compiles to a real div instruction; no call __divsi3
