@@ -17,7 +17,7 @@ Everything here is pinned. CI must use the same versions.
 
 ## Notes
 
-- Smoke test fails on a deliberately broken counter: pending (Step 5)
+- Smoke test fails on a deliberately broken counter: yes (count + 4'd2 failed at cycle 0: got 2, expected 1)
 - apt Verilator on 26.04 is 5.032 (< 5.036 needed by cocotb 2.x): built from source
 - Verilator v5.052 builds cleanly with GCC 15.2.0; about 6 min on 24 cores
 - System Python 3.14.4 is not used; project venv is 3.12
