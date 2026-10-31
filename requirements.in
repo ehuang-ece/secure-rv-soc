@@ -1,0 +1,5 @@
+cocotb>=2.0
+cocotbext-axi
+cocotb-coverage
+pycryptodome
+pytest

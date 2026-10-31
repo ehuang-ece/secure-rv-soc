@@ -7,10 +7,10 @@ Everything here is pinned. CI must use the same versions.
 | OS | Ubuntu 26.04 LTS | WSL 2 (wsl.exe -l -v) | lsb_release -a |
 | Host GCC | 15.2.0 | apt (Ubuntu default) | gcc --version |
 | Verilator | v5.052 (2026-09-05) | scripts/build_verilator.sh | --version; lint clean |
-| Python | pending (Step 4) | uv venv at .venv | python --version |
-| cocotb | pending (Step 4) | requirements.txt | smoke pass + fail test |
-| cocotbext-axi | pending (Step 4) | requirements.txt | import check |
-| cocotb-coverage | pending (Step 4) | requirements.txt | import check |
+| Python | 3.12.16 (uv 0.13.6) | uv venv at .venv | python --version |
+| cocotb | 2.1.0 | requirements.txt | smoke pass + fail test |
+| cocotbext-axi | 0.1.28 | requirements.txt | import check |
+| cocotb-coverage | 2.0 | requirements.txt | import check |
 | RISC-V GCC | pending (Step 6) | ~/opt/riscv symlink | t.S + t.c checks |
 | rv32im multilib | pending (Step 6) | — | -print-libgcc-file-name |
 | Vivado | 2026.1 (exact) | Windows / WSL | vivado -version |
