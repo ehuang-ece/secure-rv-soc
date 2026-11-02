@@ -47,6 +47,9 @@ jobs:
       - name: Put Verilator on PATH
         run: echo "$HOME/opt/verilator/bin" >> "$GITHUB_PATH"
 
+      - name: Install ccache (every run; the cached Verilator calls it)
+        run: sudo apt-get install -y ccache
+
       - name: Install uv
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
