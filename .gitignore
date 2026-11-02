@@ -27,3 +27,6 @@ __pycache__/
 !verif/formal/**/*.log
 !validation/**/*.log
 !verif/uvm/**/*.log
+# --- v5.2: LibreLane / ASIC run folders (rebuildable); keep ASIC report logs ---
+asic/**/runs/
+!reports/asic/**/*.log

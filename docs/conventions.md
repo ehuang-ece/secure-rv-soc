@@ -59,3 +59,16 @@ Confirmed by: verif/formal/uart (Day 4) — update this line with the result.
 
 - Types: feat, fix, test, docs, ci, build, chore, refactor.
 - One logical change per commit. Subject at most 72 characters, imperative mood.
+
+## FPGA/ASIC portability
+
+The same RTL must build for the Artix-7 FPGA and for SkyWater 130 nm.
+
+1. FPGA-only parts (MMCM, clock buffers, ILA probes, pin setup) live only in `fpga/`, never in `rtl/`.
+2. Every memory sits behind our own wrapper in `rtl/mem/` (e.g. `sp_ram.sv`), with an FPGA version (BRAM) and an ASIC version (flip-flops for now).
+3. No register starting values: no `initial`, no `logic x = 0`. Reset is the only way a register gets a known value.
+4. Reset asserts immediately and deasserts synchronously to the clock.
+5. One clock. Pause a block with an enable, never with a clock made from logic. Real clock gating waits for v2.0.
+6. The AES S-box is a plain `case` lookup table.
+7. Yosys must read every file in `rtl/`; if it can't, convert the file with sv2v first.
+8. CI job `asic-synth-check` runs Yosys on `rtl/` (no Xilinx files) on every push.
