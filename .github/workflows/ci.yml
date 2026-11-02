@@ -1,0 +1,93 @@
+# CI: every push runs the same checks as `make ci` on your laptop.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+# Pinned versions. Change them only together with docs/toolchain.md.
+env:
+  VERILATOR_TAG: v5.052
+  OSS_CAD_DATE: "2026-11-02"
+
+jobs:
+  sim:
+    name: lint + smoke test
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v6
+
+      - name: Restore the Verilator build from cache
+        id: vcache
+        uses: actions/cache/restore@v5
+        with:
+          path: ~/opt/verilator
+          key: verilator-2604-${{ env.VERILATOR_TAG }}-${{ hashFiles('scripts/build_verilator.sh') }}
+
+      - name: Install Verilator build tools (cache miss only)
+        if: steps.vcache.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git help2man perl python3 make autoconf g++ \
+            flex bison ccache libfl2 libfl-dev zlib1g zlib1g-dev
+
+      - name: Build the pinned Verilator (cache miss only)
+        if: steps.vcache.outputs.cache-hit != 'true'
+        run: scripts/build_verilator.sh "$VERILATOR_TAG"
+
+      - name: Save the Verilator build to cache (cache miss only)
+        if: steps.vcache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: ~/opt/verilator
+          key: ${{ steps.vcache.outputs.cache-primary-key }}
+
+      - name: Put Verilator on PATH
+        run: echo "$HOME/opt/verilator/bin" >> "$GITHUB_PATH"
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Python 3.12 venv from the lock file
+        run: |
+          uv venv --python 3.12 .venv
+          uv pip sync requirements.txt
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+
+      - name: Show tool versions
+        run: |
+          verilator --version
+          python --version
+          cocotb-config --version
+
+      - name: Lint
+        run: make lint
+
+      - name: Smoke test
+        run: make smoke
+
+  asic-synth-check:
+    name: asic-synth-check (Yosys, no Xilinx parts)
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v6
+
+      - name: Install the pinned OSS CAD Suite
+        run: |
+          BASE=https://github.com/YosysHQ/oss-cad-suite-build/releases/download
+          URL="$BASE/${OSS_CAD_DATE}/oss-cad-suite-linux-x64-${OSS_CAD_DATE//-/}.tgz"
+          curl -fsSL -o /tmp/oss-cad-suite.tgz "$URL"
+          tar -xzf /tmp/oss-cad-suite.tgz -C "$HOME"
+          echo "$HOME/oss-cad-suite/bin" >> "$GITHUB_PATH"
+
+      - name: Show Yosys version
+        run: yosys -V
+
+      - name: Portability check
+        run: make asic-synth
