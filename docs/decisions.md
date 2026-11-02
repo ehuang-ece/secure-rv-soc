@@ -96,3 +96,37 @@ Fill in Outcome later and compare it with what was expected.
 - **Choice:** (b), because both import cleanly under cocotb 2.1.0 today, so they cost nothing; had either failed, it would have been deferred with the reason here
 - **Design rules:** #9 build what you need, #13 prove it
 - **Outcome:** ___
+
+## D-011: Pin CI to ubuntu-26.04
+When: Week 1, Day 2
+Tension: same OS as the laptop (fewer variables)
+         vs. ubuntu-latest (no maintenance, but it moves under you)
+Options: (a) ubuntu-latest (b) ubuntu-24.04 (c) ubuntu-26.04
+Choice: (c)
+Driving constraint: WSL runs 26.04; a different OS in CI is one more
+  reason results could differ. ubuntu-latest migrates Oct-Nov 2026.
+Design rules: #6 shared reference, #13 fewer unknowns
+Outcome (fill in later): ___
+
+## D-012: Build Verilator in CI from the repo script, cached
+When: Week 1, Day 2
+Tension: identical tools (#6) vs. CI time
+Options: (a) apt package (too old) (b) prebuilt container
+         (c) repo script + cache keyed on tag and script hash
+Choice: (c). Cost: one 20-30 min build per tag; ~2-3 min runs after.
+Design rules: #6, #14
+Outcome: first build 4m 37s, cached 39s. The cache re-run failed: Verilator
+  was built with ccache present, so it calls ccache; a cache hit skipped the
+  apt step that installed it. Fix: install ccache on every run (d826a55).
+
+## D-013: Yosys from the OSS CAD Suite, pinned by date, end of PATH
+When: Week 1, Day 2
+Tension: one download with Yosys + SBY + solvers (Day 4)
+         vs. a second Verilator that could shadow the pinned one
+Choice: suite 2026-11-02 (Yosys 0.70+290), appended to the END of PATH;
+  never source its environment script.
+Lesson: re-activating the venv restores the PATH saved at first
+  activation; after editing ~/.bashrc, deactivate + source + soc
+  (or open a fresh terminal).
+Design rules: #6, #1
+Outcome (fill in later): ___

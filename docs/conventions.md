@@ -42,7 +42,7 @@ Applies to every file from Day 2 on. Changes need a commit that says why.
 Allowed: logic, enum, localparam, packed arrays, always_ff/always_comb,
 functions, generate.
 Not allowed in ports: interfaces, structs, unpacked arrays.
-Confirmed by: verif/formal/uart (Day 4) — update this line with the result.
+Confirmed by: asic-synth-check (Day 2): passes on the smoke counter only; rtl/ is empty until the UART arrives. verif/formal/uart (Day 4): pending.
 
 ## Verification
 
