@@ -1,12 +1,14 @@
 # Secure RISC-V SoC
 
+[![ci](https://github.com/ehuang-ece/secure-rv-soc/actions/workflows/ci.yml/badge.svg)](https://github.com/ehuang-ece/secure-rv-soc/actions/workflows/ci.yml)
+
 An RV32IM SoC on the Arty A7 that communicates securely: an AES-256-GCM
 accelerator encrypts and authenticates every message at a target of
 ≤ 20 cycles per 16-byte block (v1.0), and an ML-KEM (FIPS 203) NTT
 accelerator establishes the key (v1.5). The RTL is written to build for
 both the Artix-7 FPGA and SkyWater 130 nm (open-source LibreLane flow).
 
-**Status:** Week 1 — repo, flow and paper design. No core RTL yet.
+**Status:** Week 1 — repo, tool flow and CI. No core RTL yet.
 
 ## Where to look, by role
 
