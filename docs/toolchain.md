@@ -32,5 +32,5 @@ Everything here is pinned. CI must use the same versions.
 ## Notes (Day 2)
 - CI pins VERILATOR_TAG and OSS_CAD_DATE in ci.yml env; they must match this file
 - asic-synth-check fails on a BUFG and on an initial value: yes (Day 2, local)
-- CI fails on a deliberately broken counter: pending (Step 6, branch ci-red-test)
+- CI fails on a deliberately broken counter: yes (Day 2, branch ci-red-test, commit 9453e82: smoke FAIL, lint and asic-synth-check green)
 - Verilator cache in CI: first build 4m 37s (Verilator itself 4m 3s), cached run 39s; cache re-run caught a missing ccache dependency (fixed in d826a55)
